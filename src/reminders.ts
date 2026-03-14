@@ -25,19 +25,20 @@ function buildDateSetup(dueDate: Date, hasTime: boolean) {
   const y = dueDate.getFullYear()
   const m = dueDate.getMonth() + 1
   const d = dueDate.getDate()
-  const h = dueDate.getHours()
-  const min = dueDate.getMinutes()
 
   const setup = `
         set d to current date
         set year of d to ${y}
         set month of d to ${m}
         set day of d to ${d}
-        set hours of d to ${hasTime ? h : 0}
-        set minutes of d to ${hasTime ? min : 0}
+        set hours of d to ${hasTime ? dueDate.getHours() : 0}
+        set minutes of d to ${hasTime ? dueDate.getMinutes() : 0}
         set seconds of d to 0`
 
-  const props = hasTime ? ['due date:d', 'remind me date:d'] : ['due date:d']
+  // allday due date = date without time; due date = date with specific time
+  const props = hasTime
+    ? ['due date:d', 'remind me date:d']
+    : ['allday due date:d']
 
   return { setup, props }
 }

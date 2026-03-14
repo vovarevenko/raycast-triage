@@ -39,10 +39,13 @@ export const EXAMPLE_TEXTS = [
 
 export const EXAMPLE_TEXT = EXAMPLE_TEXTS[0]
 
-export interface ParsedReminder {
+export interface ParsedInput {
   title: string
   priority: number
-  dueDate: Date | null
+}
+
+export interface ParsedDueDate {
+  dueDate: Date
   hasTime: boolean
 }
 
@@ -73,17 +76,13 @@ function parseDuration(value: string) {
 }
 
 function extractPriority(text: string) {
-  // Match !, !!, !!! that are:
-  // - preceded by start-of-string or any char that is not !
-  // - followed by end-of-string or whitespace
   const match = text.match(/(^|.*?)(?<!=)(!!!|!!|!)(\s|$)/)
   if (!match) return { text, priority: 0 }
 
   const priority = PRIORITY_MAP[match[2]] ?? 0
   const before = text.slice(0, match.index! + match[1].length)
   const after = text.slice(match.index! + match[1].length + match[2].length)
-  const cleaned = before + after
-  return { text: cleaned, priority }
+  return { text: before + after, priority }
 }
 
 function applyTime(target: Date, time: string) {
@@ -95,7 +94,7 @@ function resolveDueDate(
   value: string,
   explicitTime: string | null,
   now: Date,
-): { dueDate: Date; hasTime: boolean } | null {
+): ParsedDueDate | null {
   const duration = parseDuration(value)
 
   if (duration) {
@@ -138,54 +137,34 @@ function resolveDueDate(
   return { dueDate: target, hasTime: false }
 }
 
-const DATE_VALUE = /(\d+[smhdw]|\d{1,2}\.\d{1,2}(?:\.\d{2,4})?)/
-const OPT_TIME = /(?:\s+(\d{1,2}:\d{2}))?/
-const END_PATTERN = new RegExp(
-  `\\s*\\/r\\s+${DATE_VALUE.source}${OPT_TIME.source}\\s*$`,
-)
-const MID_PATTERN = new RegExp(
-  `\\/r\\s+${DATE_VALUE.source}${OPT_TIME.source},\\s*`,
-)
-
-function extractDueDate(text: string, now: Date) {
-  for (const [pattern, remove] of [
-    [END_PATTERN, (m: RegExpMatchArray) => text.slice(0, m.index!)],
-    [
-      MID_PATTERN,
-      (m: RegExpMatchArray) =>
-        text.slice(0, m.index!) + text.slice(m.index! + m[0].length),
-    ],
-  ] as const) {
-    const match = text.match(pattern)
-    if (match) {
-      const result = resolveDueDate(match[1], match[2] ?? null, now)
-      if (result) {
-        return { text: remove(match), ...result }
-      }
-    }
-  }
-
-  return { text, dueDate: null as Date | null, hasTime: false }
-}
-
 function cleanUrls(text: string) {
   return text.replace(/https?:\/\//g, '').replace(/(\S)\/(?=\s|$)/g, '$1')
 }
 
-export function parseInput(
-  input: string,
-  now: Date = new Date(),
-): ParsedReminder {
+export function parseInput(input: string): ParsedInput {
   let text = input.trim()
 
   const { text: afterPriority, priority } = extractPriority(text)
   text = afterPriority
 
-  const { text: afterDate, dueDate, hasTime } = extractDueDate(text, now)
-  text = afterDate
-
   text = cleanUrls(text)
   text = text.replace(/\s+/g, ' ').trim()
 
-  return { title: text, priority, dueDate, hasTime }
+  return { title: text, priority }
+}
+
+export function parseDueDate(
+  input: string,
+  now: Date = new Date(),
+): ParsedDueDate | null {
+  const trimmed = input.trim()
+  if (!trimmed) return null
+
+  // Split "2d 14:30" into value + optional time
+  const match = trimmed.match(
+    /^(\d+[smhdw]|\d{1,2}\.\d{1,2}(?:\.\d{2,4})?)(?:\s+(\d{1,2}:\d{2}))?$/,
+  )
+  if (!match) return null
+
+  return resolveDueDate(match[1], match[2] ?? null, now)
 }

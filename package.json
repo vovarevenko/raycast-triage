@@ -24,9 +24,15 @@
       "arguments": [
         {
           "name": "text",
-          "placeholder": "Fix the printer !!! /r 1d",
+          "placeholder": "Fix the printer !!!",
           "type": "text",
           "required": true
+        },
+        {
+          "name": "due",
+          "placeholder": "1d, 20.09, 2d 14:30",
+          "type": "text",
+          "required": false
         }
       ]
     }

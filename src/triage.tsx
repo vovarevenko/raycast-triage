@@ -5,11 +5,12 @@ import {
   showToast,
   Toast,
 } from '@raycast/api'
-import { parseInput } from './parse-input'
+import { parseDueDate, parseInput } from './parse-input'
 import { createReminder, ensureList } from './reminders'
 
 interface Arguments {
   text: string
+  due?: string
 }
 
 interface Preferences {
@@ -19,7 +20,7 @@ interface Preferences {
 export default async function Command(
   props: LaunchProps<{ arguments: Arguments }>,
 ) {
-  const { text } = props.arguments
+  const { text, due } = props.arguments
   const { listName } = getPreferenceValues<Preferences>()
 
   await closeMainWindow()
@@ -36,8 +37,16 @@ export default async function Command(
       return
     }
 
+    const dueResult = due ? parseDueDate(due) : null
+
     await ensureList(listName)
-    await createReminder({ ...parsed, listName })
+    await createReminder({
+      title: parsed.title,
+      listName,
+      priority: parsed.priority,
+      dueDate: dueResult?.dueDate ?? null,
+      hasTime: dueResult?.hasTime ?? false,
+    })
 
     await showToast({
       style: Toast.Style.Success,
