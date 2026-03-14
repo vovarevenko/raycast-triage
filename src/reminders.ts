@@ -28,6 +28,7 @@ function buildDateSetup(dueDate: Date, hasTime: boolean) {
 
   const setup = `
         set d to current date
+        set day of d to 1
         set year of d to ${y}
         set month of d to ${m}
         set day of d to ${d}
