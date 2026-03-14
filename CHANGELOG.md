@@ -14,6 +14,9 @@ The format is based on [Keep a Changelog]
 
 ### Fixed
 
+- Absolute dates without year (e.g. `01.01`) now auto-bump to next year if in past
+- Today's date (e.g. `27.07` on July 27) stays in the current year
+
 ### Security
 
 ### Internal

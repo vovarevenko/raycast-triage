@@ -117,7 +117,8 @@ function resolveDueDate(
   const dateMatch = value.match(/^(\d{1,2})\.(\d{1,2})(?:\.(\d{2,4}))?$/)
   if (!dateMatch) return null
 
-  let year = dateMatch[3] ? parseInt(dateMatch[3], 10) : now.getFullYear()
+  const hasYear = !!dateMatch[3]
+  let year = hasYear ? parseInt(dateMatch[3], 10) : now.getFullYear()
   if (year < 100) year += 2000
 
   const target = new Date(
@@ -132,9 +133,17 @@ function resolveDueDate(
 
   if (explicitTime) {
     applyTime(target, explicitTime)
-    return { dueDate: target, hasTime: true }
   }
-  return { dueDate: target, hasTime: false }
+
+  // If no year specified and date is before today, bump to next year
+  if (!hasYear) {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    if (target < today) {
+      target.setFullYear(target.getFullYear() + 1)
+    }
+  }
+
+  return { dueDate: target, hasTime: !!explicitTime }
 }
 
 function cleanUrls(text: string) {
