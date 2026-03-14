@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "raycast-triage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "Triage",
   "description": "Quickly capture reminders to Apple Reminders with priority and dates",
   "icon": "extension-icon.png",
