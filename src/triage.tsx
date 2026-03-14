@@ -8,20 +8,11 @@ import {
 import { parseDueDate, parseInput } from './parse-input'
 import { createReminder, ensureList } from './reminders'
 
-interface Arguments {
-  text: string
-  due?: string
-}
-
-interface Preferences {
-  listName: string
-}
-
 export default async function Command(
-  props: LaunchProps<{ arguments: Arguments }>,
+  props: LaunchProps<{ arguments: Arguments.Triage }>,
 ) {
   const { text, due } = props.arguments
-  const { listName } = getPreferenceValues<Preferences>()
+  const { listName } = getPreferenceValues<Preferences.Triage>()
 
   await closeMainWindow()
 
