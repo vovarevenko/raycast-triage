@@ -1,0 +1,69 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "raycast-triage",
+  "title": "Triage",
+  "description": "Quickly capture reminders to Apple Reminders with priority and dates",
+  "icon": "extension-icon.png",
+  "author": "vovarevenko",
+  "categories": [
+    "Productivity"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "triage",
+      "title": "Triage",
+      "description": "Add a reminder to the Triage list",
+      "mode": "no-view",
+      "keywords": [
+        "reminder",
+        "todo",
+        "capture",
+        "inbox"
+      ],
+      "arguments": [
+        {
+          "name": "text",
+          "placeholder": "Fix the printer !!! /r 1d",
+          "type": "text",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "preferences": [
+    {
+      "name": "listName",
+      "title": "Reminders List",
+      "description": "Name of the Apple Reminders list to add reminders to",
+      "type": "textfield",
+      "default": "Triage",
+      "required": false
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.93.2",
+    "@raycast/utils": "^1.19.1"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^1.0.11",
+    "@types/node": "22.x",
+    "eslint": "^8.57.0",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.0"
+  },
+  "scripts": {
+    "build": "ray build",
+    "dev": "ray develop",
+    "check": "run-p --continue-on-error check:*",
+    "check:code": "ray lint",
+    "check:format": "prettier . --check",
+    "check:types": "tsc --noEmit",
+    "fix": "run-s fix:*",
+    "fix:code": "ray lint --fix",
+    "fix:format": "prettier . --write",
+    "test": "vitest run"
+  }
+}
