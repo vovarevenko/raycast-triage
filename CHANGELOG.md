@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ### Added
 
+- Year duration unit (`1y`, `2y`) for due dates
+
 ### Changed
 
 ### Deprecated

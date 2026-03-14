@@ -169,6 +169,20 @@ describe('parseDueDate', () => {
       expect(r.dueDate.getDate()).toBe(3)
       expect(r.dueDate.getMonth()).toBe(7)
     })
+
+    it('1y → 27.07.1997', () => {
+      const r = d('1y')!
+      expect(r.hasTime).toBe(false)
+      expect(r.dueDate.getDate()).toBe(27)
+      expect(r.dueDate.getMonth()).toBe(6)
+      expect(r.dueDate.getFullYear()).toBe(1997)
+    })
+
+    it('2y → 27.07.1998', () => {
+      const r = d('2y')!
+      expect(r.hasTime).toBe(false)
+      expect(r.dueDate.getFullYear()).toBe(1998)
+    })
   })
 
   describe('relative — day+ with explicit time', () => {
@@ -178,6 +192,13 @@ describe('parseDueDate', () => {
       expect(r.dueDate.getDate()).toBe(29)
       expect(r.dueDate.getHours()).toBe(21)
       expect(r.dueDate.getMinutes()).toBe(25)
+    })
+
+    it('1y 14:00 → 27.07.1997 14:00', () => {
+      const r = d('1y 14:00')!
+      expect(r.hasTime).toBe(true)
+      expect(r.dueDate.getFullYear()).toBe(1997)
+      expect(r.dueDate.getHours()).toBe(14)
     })
   })
 

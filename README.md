@@ -25,6 +25,7 @@ Priority markers can appear anywhere in the text and are removed from the final 
 | Relative (hours)   | `2h`          | 2 hours from now            |
 | Relative (days)    | `1d`          | tomorrow (date only)        |
 | Relative (weeks)   | `1w`          | 1 week from now (date only) |
+| Relative (years)   | `1y`          | 1 year from now (date only) |
 | Relative + time    | `2d 14:30`    | 2 days from now at 14:30    |
 | Absolute           | `20.09`       | September 20, current year  |
 | Absolute + year    | `20.09.26`    | September 20, 2026          |

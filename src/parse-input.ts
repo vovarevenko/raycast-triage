@@ -66,13 +66,14 @@ const DURATION_UNITS: Record<string, number> = {
 const SUB_DAY_UNITS = new Set(['s', 'm', 'h'])
 
 function parseDuration(value: string) {
-  const match = value.match(/^(\d+)([smhdw])$/)
+  const match = value.match(/^(\d+)([smhdwy])$/)
   if (!match) return null
   const amount = parseInt(match[1], 10)
   const unit = match[2]
+  if (unit === 'y') return { ms: 0, unit, amount }
   const multiplier = DURATION_UNITS[unit]
   if (!multiplier) return null
-  return { ms: amount * multiplier, unit }
+  return { ms: amount * multiplier, unit, amount }
 }
 
 function extractPriority(text: string) {
@@ -105,7 +106,15 @@ function resolveDueDate(
       }
     }
 
-    const target = new Date(now.getTime() + duration.ms)
+    const target =
+      duration.unit === 'y'
+        ? new Date(
+            now.getFullYear() + duration.amount,
+            now.getMonth(),
+            now.getDate(),
+          )
+        : new Date(now.getTime() + duration.ms)
+
     if (explicitTime) {
       applyTime(target, explicitTime)
       return { dueDate: target, hasTime: true }
@@ -171,7 +180,7 @@ export function parseDueDate(
 
   // Split "2d 14:30" into value + optional time
   const match = trimmed.match(
-    /^(\d+[smhdw]|\d{1,2}\.\d{1,2}(?:\.\d{2,4})?)(?:\s+(\d{1,2}:\d{2}))?$/,
+    /^(\d+[smhdwy]|\d{1,2}\.\d{1,2}(?:\.\d{2,4})?)(?:\s+(\d{1,2}:\d{2}))?$/,
   )
   if (!match) return null
 
