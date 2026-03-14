@@ -1,6 +1,6 @@
 # Triage
 
-Quickly capture reminders to Apple Reminders with priority, due dates, and tags. Type, press Enter, move on.
+Quickly capture reminders to Apple Reminders with priority and due dates. Type, press Enter, move on.
 
 ## Usage
 
@@ -13,7 +13,6 @@ Open Raycast, type **Triage**, then enter your reminder text in the first argume
 | Priority (high)   | `!!!`         | `Fix the printer!!!`                           |
 | Priority (medium) | `!!`          | `Deploy hotfix !!`                             |
 | Priority (low)    | `!`           | `Update docs !`                                |
-| Inline tags       | `#tag`        | `Review PR #work`                              |
 | URL cleanup       | paste any URL | `https://example.com/foo/` → `example.com/foo` |
 
 Priority markers can appear anywhere in the text and are removed from the final reminder title.

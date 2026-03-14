@@ -24,7 +24,6 @@ The format is based on [Keep a Changelog]
 
 - Quick-capture reminders via inline Raycast command
 - Priority markers: `!` (low), `!!` (medium), `!!!` (high)
-- Inline `#tags` in reminder text
 - Separate due date: relative `1d`, absolute `20.09`, with time `2d 14:30`
 - URL cleanup — strips protocol and trailing slash
 - Auto-create Reminders list if missing
